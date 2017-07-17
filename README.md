@@ -1,4 +1,4 @@
-`	# MTCNN C++ Implementation
+# MTCNN C++ Implementation
 
 This is a C++ project to implement MTCNN, a perfect face detect algorithm, on different DL frameworks.<br>
 The most popular frameworks: caffe/mxnet/tensorflow, are all suppported now.
