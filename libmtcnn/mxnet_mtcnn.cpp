@@ -164,6 +164,8 @@ void mxnet_mtcnn::detect(cv::Mat& orig_img, std::vector<face_box>& face_list)
 	process_boxes(total_pnet_boxes,img_h,img_w,pnet_boxes);
 
 
+        if(pnet_boxes.size()==0)
+            return;
 
 	if(pnet_boxes.size()>rnet_batch_bound_)
 	{
@@ -189,6 +191,8 @@ void mxnet_mtcnn::detect(cv::Mat& orig_img, std::vector<face_box>& face_list)
 	std::vector<face_box> rnet_boxes;
 	process_boxes(total_rnet_boxes,img_h,img_w,rnet_boxes);
 
+        if(rnet_boxes.size()==0)
+             return;
 
 	if(rnet_boxes.size()>onet_batch_bound_)
 	{

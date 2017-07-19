@@ -87,12 +87,16 @@ void caffe_mtcnn::detect(cv::Mat& img, std::vector<face_box>& face_list)
 	process_boxes(total_pnet_boxes,img_h,img_w,pnet_boxes);
 
 
-        if(total_pnet_boxes.size()==0||pnet_boxes.size()==0)return;
+        if(pnet_boxes.size()==0)
+             return;
+
 	run_RNet(working_img,pnet_boxes,total_rnet_boxes);
 
 	std::vector<face_box> rnet_boxes;
 	process_boxes(total_rnet_boxes,img_h,img_w,rnet_boxes);
-        if(total_rnet_boxes.size()==0||rnet_boxes.size()==0)return;
+
+        if(rnet_boxes.size()==0)
+             return;
 
 	run_ONet(working_img,rnet_boxes,total_onet_boxes);
 
