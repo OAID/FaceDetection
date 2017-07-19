@@ -10,9 +10,9 @@ The most popular frameworks: caffe/mxnet/tensorflow, are all suppported now.
 	* Build CaffeOnACL, refer to [CaffeOnACL Release notes](https://github.com/OAID/caffeOnACL/tree/master/acl_openailab/README.md)
 	* Build MxnetOnACL, refer to [MxnetOnACL release notes](https://github.com/OAID/mxnetOnACL/tree/master/acl_openailab/README.md)
 	* Build tensorflow, to generate libtensorflow.so, please use:
-
-	>> bazel build --config=opt //tensorflow/tools/lib_package:libtensorflow
-	>> the tarball, bazel-bin/tensorflow/tools/lib_package/libtensorflow.tar.gz, includes the libtensorflow.so and c header files  
+		>> bazel build --config=opt //tensorflow/tools/lib_package:libtensorflow
+	
+	  the tarball, bazel-bin/tensorflow/tools/lib_package/libtensorflow.tar.gz, includes the libtensorflow.so and c header files  
 
 * Install opencv package 
 
@@ -55,5 +55,7 @@ https://github.com/pangyupo/mxnet_mtcnn_face_detection
 FaceNet uses MTCNN to align face
 
 https://github.com/davidsandberg/facenet
+
 From this directory:
-  facenet/src/align
+
+    facenet/src/align
