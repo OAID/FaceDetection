@@ -52,11 +52,13 @@ void caffe_mtcnn::detect(cv::Mat& img, std::vector<face_box>& face_list)
 	cv::Mat working_img;
 	float alpha=0.0078125;
 	float mean=127.5;
+	int max_batch_size=64;
+	int start_idx,end_idx;
 
 
 	img.convertTo(working_img, CV_32FC3);
 
-        working_img=(working_img-mean)*alpha;
+	working_img=(working_img-mean)*alpha;
 
 	working_img=working_img.t();
 
@@ -87,18 +89,56 @@ void caffe_mtcnn::detect(cv::Mat& img, std::vector<face_box>& face_list)
 	process_boxes(total_pnet_boxes,img_h,img_w,pnet_boxes);
 
 
-        if(pnet_boxes.size()==0)
-             return;
+	if(pnet_boxes.size()==0)
+		return;
 
-	run_RNet(working_img,pnet_boxes,total_rnet_boxes);
+	start_idx=0;
+	end_idx=pnet_boxes.size();
+
+	while(start_idx<end_idx)
+	{
+		int  batch_len=end_idx-start_idx;
+
+		if(batch_len>max_batch_size)
+			batch_len=max_batch_size;
+
+		std::vector<face_box> input_boxes;
+		std::vector<face_box> output_boxes;
+
+		for(int i=0;i<batch_len;i++)
+			input_boxes.push_back(pnet_boxes[start_idx++]);
+
+		run_RNet(working_img,input_boxes,output_boxes);
+
+		total_rnet_boxes.insert(total_rnet_boxes.end(),output_boxes.begin(),output_boxes.end());
+	}
+
 
 	std::vector<face_box> rnet_boxes;
 	process_boxes(total_rnet_boxes,img_h,img_w,rnet_boxes);
 
-        if(rnet_boxes.size()==0)
-             return;
+	if(rnet_boxes.size()==0)
+		return;
 
-	run_ONet(working_img,rnet_boxes,total_onet_boxes);
+	start_idx=0;
+	end_idx=rnet_boxes.size();
+
+	while(start_idx<end_idx)
+	{
+		int  batch_len=end_idx-start_idx;
+		std::vector<face_box> input_boxes;
+		std::vector<face_box> output_boxes;
+
+		if(batch_len>max_batch_size)
+			batch_len=max_batch_size;
+
+		for(int i=0;i<batch_len;i++)
+			input_boxes.push_back(rnet_boxes[start_idx++]);
+
+		run_ONet(working_img,input_boxes,output_boxes);
+
+		total_onet_boxes.insert(total_onet_boxes.end(),output_boxes.begin(),output_boxes.end());
+	}
 
 	//calculate the landmark
 	for(unsigned int i=0;i<total_onet_boxes.size();i++)
