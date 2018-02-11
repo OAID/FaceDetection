@@ -2,6 +2,8 @@ CC = $(PREFIX)gcc
 CXX = $(PREFIX)g++
 AR = $(PREFIX)ar
 
+export PKG_CONFIG_PATH=/usr/local/AID/pkgconfig
+
 CFLAGS += -Wall -O2
 CFLAGS += -I$(TOPDIR)/include
 
@@ -18,25 +20,22 @@ TF_ON = 0
 LDFLAGS += -L$(MTCNNLIBDIR) -lmtcnn
 
 # opencv headers and libraries
-CXXFLAGS += $(shell pkg-config --cflags opencv)
-LDFLAGS += $(shell pkg-config --libs opencv)
+CXXFLAGS += `pkg-config --cflags opencv`
+LDFLAGS += `pkg-config --libs opencv`
 
 # mxnet settings
 ifeq ($(MXNET_ON), 1)
-   MXNET_INCS += -I$(MXNET_ROOT)/include
-   MXNET_INCS += -I$(MXNET_ROOT)/dmlc-core/include
-   MXNET_INCS += -I$(MXNET_ROOT)/nnvm/include
+   MXNET_INCS += `pkg-config --cflags mxnet-hrt`
 
-   LDFLAGS += -L$(MXNET_ROOT)/lib -lmxnet
+   LDFLAGS += `pkg-config --libs mxnet-hrt`
    CXXFLAGS += $(MXNET_INCS) -Wno-sign-compare
 endif
 
 # caffe settings
 ifeq ($(CAFFE_ON), 1)
-   CAFFE_INCS := -I$(CAFFE_ROOT)/include
-   CAFFE_INCS += -I$(CAFFE_ROOT)/distribute/include
+   CAFFE_INCS := `pkg-config --cflags caffe-hrt`
 
-   LDFLAGS += -L$(CAFFE_ROOT)/build/lib -lcaffe
+   LDFLAGS += `pkg-config --libs caffe-hrt`
    LDFLAGS += -lprotobuf -lboost_system -lglog
    CXXFLAGS += $(CAFFE_INCS) -DCPU_ONLY=1
 endif
@@ -50,7 +49,7 @@ ifeq ($(TF_ON), 1)
 endif
 
 # arm compute library setting
-LDFLAGS += -L$(ACL_ROOT)/build -larm_compute
+LDFLAGS += `pkg-config --libs computelibrary`
 
 %.os : %.cpp
 	$(CXX) -fpic -shared $(CXXFLAGS) -c $< -o $@

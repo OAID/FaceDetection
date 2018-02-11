@@ -7,16 +7,14 @@ The most popular frameworks: caffe/mxnet/tensorflow, are all suppported now.
 
 * Bulid caffe,  mxnet  or tensorflow first
    Please  edit makefile.mk (set xxx_ON flags to enable corresponding dp framework) to select one or more to be supported
-	* Build CaffeOnACL, refer to [CaffeOnACL Release notes](https://github.com/OAID/caffeOnACL/tree/master/acl_openailab/README.md)
-	* Build MxnetOnACL, refer to [MxnetOnACL release notes](https://github.com/OAID/mxnetOnACL/tree/master/acl_openailab/README.md)
+	* Build Caffe-HRT, refer to [Caffe-HRT Release notes](https://github.com/OAID/Caffe-HRT/blob/master/README.md)
+	* Build MXNet-HRT, refer to [MXNet-HRT release notes](https://github.com/OAID/MXNet-HRT/blob/master/README.md)
 	* Build tensorflow, to generate libtensorflow.so, please use:
 		>> bazel build --config=opt //tensorflow/tools/lib_package:libtensorflow
 	
 	  the tarball, bazel-bin/tensorflow/tools/lib_package/libtensorflow.tar.gz, includes the libtensorflow.so and c header files  
 
-* Install opencv package 
-
-* Edit Makefile to set `CAFFE_ROOT`, `MXNET_ROOT`  or `TENSORFLOW_ROOT` to the right path in your machine. For example : CAFFE_ROOT=~/oaid/caffeOnACL.
+* Edit Makefile to set `CAFFE_ROOT`, `MXNET_ROOT`  or `TENSORFLOW_ROOT` to the right path in your machine. For example : CAFFE_ROOT=/usr/local/AID/Caffe-HRT/.
 
 * make -j4
 
@@ -33,8 +31,16 @@ The new picture, which boxed face and 5 landmark points will be created and save
 
 ### 2. Test on camera (DL Framework is caffe)
 
- 	./camera -t caffe
+ 	./run.sh
 
+
+# Release History
+
+### Version 0.1.0 - 2018-2-11
+   
+  * Modified readme file.  
+  * Modified makefile.mk.  
+  * Add run.sh script  
 
 # Credit
 
